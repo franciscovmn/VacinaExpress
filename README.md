@@ -46,3 +46,33 @@ Abra um terminal na raiz do projeto e execute:
 ```bash
 mkdir -p bin
 javac -cp "libs/*" -d bin $(find src -name "*.java")
+```
+
+## Executar
+Para executar uma das aplicações de console, use o comando abaixo, substituindo `NomeDaClasse` pelo nome da classe desejada (ex.: `Cadastrar`):
+```bash
+java -cp "bin:libs/*" appconsole.NomeDaClasse
+```
+Cadastrar pessoas, vacinas e vacinações:
+```bash
+java -cp "bin:libs/*" appconsole.Cadastrar
+```
+
+Listar todas as pessoas, vacinas e vacinações:
+```bash
+java -cp "bin:libs/*" appconsole.Listar
+```
+
+Consultar pessoas, vacinas e vacinações:
+```bash
+java -cp "bin:libs/*" appconsole.Consultar
+``` 
+
+Alterar pessoas, vacinas e vacinações:
+```bash
+java -cp "bin:libs/*" appconsole.Alterar
+``` 
+Apagar pessoas, vacinas e vacinações:
+```bash
+java -cp "bin:libs/*" appconsole.Apagar
+```
