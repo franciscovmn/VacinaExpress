@@ -76,3 +76,28 @@ Apagar pessoas, vacinas e vacinações:
 ```bash
 java -cp "bin:libs/*" appconsole.Apagar
 ```
+
+No Windows (cmd.exe e PowerShell)
+Observação: no Windows o separador de classpath é `;` (ponto e vírgula).
+
+- Usando Command Prompt (cmd.exe)
+```cmd
+mkdir bin
+rem gerar lista de fontes e compilar (interativamente use %i, em arquivos .bat use %%i)
+for /R %i in (*.java) do @echo %i >> sources.txt
+javac -cp "libs/*" -d bin @sources.txt
+del sources.txt
+
+rem executar (exemplo)
+java -cp "bin;libs/*" appconsole.Cadastrar
+```
+
+- Usando PowerShell
+```powershell
+mkdir bin
+$src = Get-ChildItem -Recurse -Filter *.java | ForEach-Object { $_.FullName }
+javac -cp "libs/*" -d bin $src
+
+# executar (exemplo)
+java -cp "bin;libs/*" appconsole.Cadastrar
+```
