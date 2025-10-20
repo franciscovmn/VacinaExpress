@@ -8,13 +8,49 @@ import modelo.Vacinacao;
 import modelo.Vacina;
 import util.Db4oUtil;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
 public class Apagar {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ObjectContainer db = Db4oUtil.abrirDB();
+        System.out.print("CPF da pessoa a apagar: ");
+        String cpf = sc.nextLine().trim();
+
+        ObjectContainer db = Db4oUtil.getInstance();
+        try {
+            // localizar pessoa pelo CPF
+            Pessoa exemploPessoa = new Pessoa();
+            exemploPessoa.setCpf(cpf);
+            ObjectSet<Pessoa> resultadoPessoa = db.queryByExample(exemploPessoa);
+
+            if (!resultadoPessoa.hasNext()) {
+                System.out.println("Pessoa não encontrada com CPF: " + cpf);
+            } else {
+                Pessoa pessoa = resultadoPessoa.next();
+
+                // apagar vacinações relacionadas (somente Vacinacao)
+                List<Vacinacao> paraApagar = new ArrayList<>();
+                ObjectSet<Vacinacao> todasVacs = db.query(Vacinacao.class);
+                while (todasVacs.hasNext()) {
+                    Vacinacao v = todasVacs.next();
+                    if (v.getPessoa() != null && cpf.equals(v.getPessoa().getCpf())) {
+                        paraApagar.add(v);
+                    }
+                }
+                for (Vacinacao v : paraApagar) {
+                    db.delete(v);
+                }
+
+                // apagar a pessoa
+                db.delete(pessoa);
+
+                System.out.println("Pessoa e suas vacinações relacionadas apagadas com sucesso.");
+            }
+        } finally {
+            db.close();
+        }
 
         try {
             System.out.println("=== APAGAR ===");
