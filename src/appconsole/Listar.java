@@ -2,14 +2,14 @@ package appconsole;
 
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+
 import modelo.Pessoa;
 import modelo.Vacina;
 import modelo.Vacinacao;
-import util.Db4oUtil;
 
 public class Listar {
     public static void main(String[] args) {
-        ObjectContainer db = Db4oUtil.abrirDB();
+        ObjectContainer db = Util.conectarBanco();
         try {
             System.out.println("---- Pessoas ----");
             ObjectSet<Pessoa> pessoas = db.query(Pessoa.class);
@@ -35,7 +35,7 @@ public class Listar {
                 System.out.println(v);
             }
         } finally {
-            Db4oUtil.fecharDB(db);
+        	Util.desconectar();
         }
     }
 }

@@ -1,5 +1,7 @@
 package appconsole;
 
+import java.util.Scanner;
+
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet; // Import necessário
 import com.db4o.query.Query; // Import necessário
@@ -8,9 +10,6 @@ import modelo.Localizacao;
 import modelo.Pessoa;
 import modelo.Vacina;
 import modelo.Vacinacao;
-import util.Db4oUtil;
-
-import java.util.Scanner;
 
 public class Cadastrar {
 
@@ -18,7 +17,7 @@ public class Cadastrar {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ObjectContainer db = Db4oUtil.abrirDB(); // abreDB() agora ativa o ControleID
+        ObjectContainer db = Util.conectarBanco(); // abreDB() agora ativa o ControleID
 
         try {
             // garantir vacinas iniciais
@@ -143,7 +142,7 @@ public class Cadastrar {
             System.out.println("Erro: " + ex.getMessage());
             ex.printStackTrace(); // Ajuda a depurar
         } finally {
-            Db4oUtil.fecharDB(db);
+        	Util.desconectar();
             sc.close();
         }
     }

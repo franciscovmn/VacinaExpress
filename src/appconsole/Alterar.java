@@ -1,19 +1,19 @@
 package appconsole;
 
-import com.db4o.ObjectContainer;
-import com.db4o.query.Query;
-import com.db4o.ObjectSet;
-import modelo.Pessoa;
-import modelo.Vacinacao;
-import modelo.Vacina;
-import util.Db4oUtil;
-
 import java.util.Scanner;
+
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+import com.db4o.query.Query;
+
+import modelo.Pessoa;
+import modelo.Vacina;
+import modelo.Vacinacao;
 
 public class Alterar {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ObjectContainer db = Db4oUtil.abrirDB();
+        ObjectContainer db = Util.conectarBanco();
 
         try {
             System.out.println("=== ALTERAR ===");
@@ -37,13 +37,19 @@ public class Alterar {
                     System.out.println("Pessoa atual: " + p);
                     System.out.print("Novo dtNascimento (enter para manter): ");
                     String novoDt = sc.nextLine().trim();
-                    if (!novoDt.isEmpty()) p.setDtNascimento(novoDt);
+                    if (!novoDt.isEmpty()) {
+						p.setDtNascimento(novoDt);
+					}
                     System.out.print("Nova latitude (enter para manter): ");
                     String latS = sc.nextLine().trim();
-                    if (!latS.isEmpty()) p.getLocalizacao().setLatitude(Double.parseDouble(latS));
+                    if (!latS.isEmpty()) {
+						p.getLocalizacao().setLatitude(Double.parseDouble(latS));
+					}
                     System.out.print("Nova longitude (enter para manter): ");
                     String lonS = sc.nextLine().trim();
-                    if (!lonS.isEmpty()) p.getLocalizacao().setLongitude(Double.parseDouble(lonS));
+                    if (!lonS.isEmpty()) {
+						p.getLocalizacao().setLongitude(Double.parseDouble(lonS));
+					}
 
                     db.store(p);
                     db.commit();
@@ -63,11 +69,17 @@ public class Alterar {
                     System.out.println("Vacinacao atual: " + vac);
                     System.out.println("Vacinas disponíveis:");
                     ObjectSet<Vacina> vacs = db.query(Vacina.class);
-                    for (Vacina v : vacs) System.out.println(" id=" + v.getId() + " nome=" + v.getNome());
+                    for (Vacina v : vacs) {
+						System.out.println(" id=" + v.getId() + " nome=" + v.getNome());
+					}
                     System.out.print("Id da nova vacina: ");
                     int novoIdVac = Integer.parseInt(sc.nextLine().trim());
                     Vacina nova = null;
-                    for (Vacina v : vacs) if (v.getId() == novoIdVac) nova = v;
+                    for (Vacina v : vacs) {
+						if (v.getId() == novoIdVac) {
+							nova = v;
+						}
+					}
                     if (nova == null) {
                         System.out.println("Vacina não encontrada.");
                     } else {
@@ -125,7 +137,7 @@ public class Alterar {
             }
 
         } finally {
-            Db4oUtil.fecharDB(db);
+        	Util.desconectar();
             sc.close();
         }
     }

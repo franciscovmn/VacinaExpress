@@ -1,17 +1,16 @@
 package appconsole;
 
-import com.db4o.ObjectContainer;
-import com.db4o.query.Query;
-import com.db4o.ObjectSet;
-import modelo.Pessoa;
-import modelo.Vacinacao;
-import modelo.Vacina;
-import util.Db4oUtil;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+import com.db4o.query.Query;
+
+import modelo.Pessoa;
+import modelo.Vacina;
+import modelo.Vacinacao;
 
 public class Apagar {
     public static void main(String[] args) {
@@ -26,7 +25,7 @@ public class Apagar {
             int opc = Integer.parseInt(sc.nextLine().trim());
 
             // abrir DB (ajuste o método se necessário: abrirDB() ou getInstance())
-            ObjectContainer db = Db4oUtil.abrirDB();
+            ObjectContainer db = Util.conectarBanco();
             try {
                 if (opc == 1) {
                     System.out.print("CPF: ");
@@ -108,7 +107,7 @@ public class Apagar {
                     System.out.println("Opção inválida.");
                 }
             } finally {
-                Db4oUtil.fecharDB(db);
+            	Util.desconectar();
             }
         } finally {
             sc.close();

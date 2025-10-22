@@ -1,20 +1,20 @@
 package appconsole;
 
-import com.db4o.ObjectContainer;
-import com.db4o.query.Query;
-import com.db4o.ObjectSet;
-import modelo.Vacinacao;
-import modelo.Pessoa;
-import util.Db4oUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+import com.db4o.query.Query;
+
+import modelo.Pessoa;
+import modelo.Vacinacao;
+
 public class Consultar {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ObjectContainer db = Db4oUtil.abrirDB();
+        ObjectContainer db = Util.conectarBanco();
         try {
             System.out.println("=== CONSULTAR (SODA) ===");
             System.out.println("1 - Vacinações na data X");
@@ -31,7 +31,9 @@ public class Consultar {
                 q1.descend("data").constrain(dataX);
                 ObjectSet<Vacinacao> res1 = q1.execute();
                 System.out.println("Vacinacoes na data " + dataX + ":");
-                for (Vacinacao v : res1) System.out.println(v);
+                for (Vacinacao v : res1) {
+					System.out.println(v);
+				}
             } else if (opc == 2) {
                 System.out.print("Data (YYYY-MM-DD): ");
                 String dataX = sc.nextLine().trim();
@@ -61,7 +63,7 @@ public class Consultar {
                 System.out.println("Opção inválida.");
             }
         } finally {
-            Db4oUtil.fecharDB(db);
+        	Util.desconectar();
             sc.close();
         }
     }
