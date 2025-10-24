@@ -13,16 +13,14 @@ import modelo.Vacinacao;
 
 public class Cadastrar {
 
-    // REMOVIDOS os métodos proximoIdVacinacao e proximoIdVacina
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ObjectContainer db = Util.conectarBanco(); // abreDB() agora ativa o ControleID
+        ObjectContainer db = Util.conectarBanco(); 
 
         try {
             // garantir vacinas iniciais
             if (db.query(Vacina.class).isEmpty()) {
-                // Passa 0 como ID inicial, ControleID irá gerar o ID correto
                 db.store(new Vacina(0, "CoronaVac"));
                 db.store(new Vacina(0, "Pfizer"));
                 db.store(new Vacina(0, "AstroVac"));
@@ -56,21 +54,17 @@ public class Cadastrar {
                     System.out.println("Pessoa com esse CPF já existe.");
                 } else {
                     Pessoa p = new Pessoa(cpf, dt, new Localizacao(lat, lon));
-                    db.store(p); // ControleID não age aqui, pois Pessoa não tem 'int id'
+                    db.store(p); 
                     db.commit();
                     System.out.println("Pessoa cadastrada com sucesso.");
                 }
             } else if (opc == 2) {
                 System.out.print("Nome da Vacina: ");
                 String nome = sc.nextLine().trim();
-                // int id = proximoIdVacina(db); // REMOVIDO
-                // Passa 0 como ID inicial, ControleID irá gerar o ID correto
                 Vacina v = new Vacina(0, nome);
-                db.store(v); // Trigger do ControleID atuará aqui para definir o ID
-                db.commit(); // Salva o objeto com o ID gerado e salva o estado do ID
-                // Para mostrar o ID gerado, é preciso recuperar o objeto após o commit
-                // ou buscar o último ID salvo (ControleID não expõe isso diretamente)
-                // Vamos exibir uma mensagem genérica ou buscar o objeto recém-criado:
+                db.store(v); 
+                db.commit(); 
+
                  Query qVac = db.query();
                  qVac.constrain(Vacina.class);
                  qVac.descend("nome").constrain(nome); // Supõe nome único para exemplo
@@ -119,19 +113,17 @@ public class Cadastrar {
                     } else {
                         System.out.print("Data da vacinação (YYYY-MM-DD): ");
                         String data = sc.nextLine().trim();
-                        // int idVacn = proximoIdVacinacao(db); // REMOVIDO
-                        // Passa 0 como ID inicial, ControleID irá gerar o ID correto
                         Vacinacao v = new Vacinacao(0, data, p, vacinaEscolhida);
 
                         // relacionar
                         p.adicionarVacinacao(v);
                         vacinaEscolhida.adicionarVacinacao(v);
 
-                        db.store(v); // Trigger do ControleID atuará aqui para definir o ID de Vacinacao
-                        db.store(p); // Atualiza Pessoa com a nova Vacinacao na lista
-                        db.store(vacinaEscolhida); // Atualiza Vacina com a nova Vacinacao na lista
-                        db.commit(); // Salva tudo e atualiza os contadores de ID
-                        System.out.println("Vacinacao cadastrada com id=" + v.getId()); // Agora v tem o ID gerado
+                        db.store(v); 
+                        db.store(p);
+                        db.store(vacinaEscolhida); 
+                        db.commit(); 
+                        System.out.println("Vacinacao cadastrada com id=" + v.getId());
                     }
                 }
             } else {
@@ -140,7 +132,7 @@ public class Cadastrar {
 
         } catch (Exception ex) {
             System.out.println("Erro: " + ex.getMessage());
-            ex.printStackTrace(); // Ajuda a depurar
+            ex.printStackTrace(); //depurar
         } finally {
         	Util.desconectar();
             sc.close();

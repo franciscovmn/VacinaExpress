@@ -24,7 +24,6 @@ public class Apagar {
             System.out.print("Escolha: ");
             int opc = Integer.parseInt(sc.nextLine().trim());
 
-            // abrir DB (ajuste o método se necessário: abrirDB() ou getInstance())
             ObjectContainer db = Util.conectarBanco();
             try {
                 if (opc == 1) {
